@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebook Data Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">   
+            <h1 class="header-title">
+  Notebook Data Management
+  <img src="https://www.thaisolarenergy.com/wp-content/uploads/2019/10/logo-new.png" alt="ไอคอน" width="160" height="60">
+</h1>
+
+              <p>Thai Solar Energy Public Company Limited</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div>
+                    <h3>Total Devices</h3>
+                    <div class="number total-count">0</div>
+                </div>
+                <div class="icon">💻</div>
+            </div>
+            <div class="summary-card">
+                <div>
+                    <h3>Active</h3>
+                    <div class="number active-count" style="color: #059669;">0</div>
+                </div>
+                <div class="icon">🟢</div>
+            </div>
+            <div class="summary-card">
+                <div>
+                    <h3>Inactive</h3>
+                    <div class="number inactive-count" style="color: #dc2626;">0</div>
+                </div>
+                <div class="icon">🔴</div>
+            </div>
+            <div class="summary-card">
+                <div>
+                    <h3>Damaged</h3>
+                    <div class="number damaged-count" style="color: #d97706;">0</div>
+                </div>
+                <div class="icon">🟡</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search notebooks...">
+            </div>
+            
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <label style="font-size: 14px;">Show:</label>
+                <select id="rowsPerPage" style="padding: 6px; border: 1px solid #d1d5db; border-radius: 4px;">
+                    <option value="10">10</option>
+                    <option value="20" selected>20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <span style="font-size: 14px;">entries</span>
+            </div>
+            
+            <div style="display: flex; gap: 12px;">
+                <button id="exportBtn" class="button button-secondary">
+                    📊 Export to Excel
+                </button>
+                <button id="addBtn" class="button button-primary">
+                    ➕ Add Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table id="notebookTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('index')">No. ↕</th>
+                            <th onclick="sortTable('assetCode')">Asset Code ↕</th>
+                            <th onclick="sortTable('model')">Model ↕</th>
+                            <th onclick="sortTable('serialNumber')">Serial Number ↕</th>
+                            <th onclick="sortTable('location')">Location ↕</th>
+                            <th onclick="sortTable('userName')">User Name ↕</th>
+                            <th onclick="sortTable('department')">Department ↕</th>
+                            <th onclick="sortTable('status')">Status ↕</th>
+                            <th onclick="sortTable('deviceNumber')">Device Number ↕</th>
+                            <th onclick="sortTable('purchasedUnder')">Purchased Under ↕</th>
+                            <th onclick="sortTable('dueDate')">5-Year Due Date ↕</th>
+                            <th class="remark-col" onclick="sortTable('remark')">Remark ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <div id="tableInfo">Showing 0 to 0 of 0 entries</div>
+            <div class="status-summary">
+                <div class="status-item">
+                    <span>🟢</span>
+                    <span>Active: <strong class="active-count">0</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>🔴</span>
+                    <span>Inactive: <strong class="inactive-count">0</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>🟡</span>
+                    <span>Damaged: <strong class="damaged-count">0</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div id="formModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Notebook</h2>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="notebookForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Asset Code *</label>
+                            <input type="text" name="assetcode" class="form-input" placeholder="e.g., NB-2024-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Model *</label>
+                            <input type="text" name="model" class="form-input" placeholder="e.g., Dell Latitude 5520" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Serial Number *</label>
+                            <input type="text" name="serialnumber" class="form-input" placeholder="e.g., DL5520240101" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Location *</label>
+                            <input type="text" name="location" class="form-input" placeholder="e.g., IT Department - Floor 3" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">User Name</label>
+                            <input type="text" name="username" class="form-input" placeholder="e.g., John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department *</label>
+                            <input type="text" name="department" class="form-input" placeholder="e.g., Information Technology" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status *</label>
+                            <select name="status" class="form-select" required>
+                                <option value="">Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="damaged">Damaged</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Device Number</label>
+                            <input type="text" name="devicenumber" class="form-input" placeholder="e.g., DEV-001">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Purchased Under</label>
+                            <input type="text" name="purchasedunder" class="form-input" placeholder="e.g., IT Budget 2024">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">5-Year Due Date</label>
+                            <input type="date" name="duedate" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Remark</label>
+                        <textarea name="remark" class="form-textarea" placeholder="Additional notes or comments about this device..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="closeModal()" class="button button-secondary">Cancel</button>
+                        <button type="submit" class="button button-primary">Save Notebook</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button onclick="closeDeleteModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px;">Are you sure you want to delete this notebook entry? This action cannot be undone.</p>
+                <div id="deleteInfo" style="background: #f9fafb; padding: 12px; border-radius: 6px; margin-bottom: 24px;"></div>
+                <div class="form-actions">
+                    <button onclick="closeDeleteModal()" class="button button-secondary">Cancel</button>
+                    <button onclick="confirmDelete()" class="button button-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://unpkg.com/@supabase/supabase-js"></script>
+<script src="script.js"></script>
+</body>
+</html>
