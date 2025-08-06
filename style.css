@@ -6,7 +6,7 @@ body {
     color: #1e293b;
     line-height: 1.6;
 
-    background-image: url("https://i1.wp.com/www.slashfilm.com/wp/wp-content/images/Minions-movie-2.jpg");
+    background-image: url("");
     background-size: cover;             /* ขยายให้เต็มหน้าจอ */
     background-position: center;        /* จัดตำแหน่งตรงกลาง */
     background-repeat: no-repeat;       /* ไม่ให้ภาพซ้ำ */
@@ -273,3 +273,4 @@ td.remark-cell {
     .summary-grid { grid-template-columns: 1fr; }
 
 }
+
